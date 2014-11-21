@@ -16,17 +16,15 @@ var express = require('express'),
     tests = require('./tests.js'),
     projects = require('./projects.js'),
     paper = require('paper'),
-    db = require('./db.js');
- //   cluster = require('cluster');
+    db = require('./db.js'),
+    cluster = require('cluster');
 
-
-/*var numCPUs = require('os').cpus().length;
+var numCPUs = require('os').cpus().length;
 if (cluster.isMaster) {
     for (var i = 0; i < numCPUs; i++) {
         cluster.fork();
     }
 } else {
-*/
     var io = require('socket.io').listen(server);
     app.configure(function() {
         app.use(express.static(__dirname + '/public'));
@@ -141,4 +139,4 @@ if (cluster.isMaster) {
         socket.emit('project:load:error');
     }
     server.listen(443);
-//}
+}
