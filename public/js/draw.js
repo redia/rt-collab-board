@@ -32,7 +32,7 @@ $('#activeColorSwatch').css('background-color', $('.colorSwatch.active').css('ba
 
 // Initialise Socket.io
 var socket = io.connect('/');
-var worker = new Worker('worker.js');
+var worker = new Worker('socketSender.js');
 
 // Random User ID
 // Used when sending data
