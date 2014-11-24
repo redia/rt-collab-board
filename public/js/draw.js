@@ -32,8 +32,6 @@ $('#activeColorSwatch').css('background-color', $('.colorSwatch.active').css('ba
 
 // Initialise Socket.io
 var socket = io.connect('/');
-var worker = new Worker('socketSender.js');
-
 // Random User ID
 // Used when sending data
 var uid = (function () {
@@ -44,7 +42,7 @@ var uid = (function () {
 }());
 
 function getParameterByName(name)
-{ 
+{
   name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
   var regexS = "[\\?&]" + name + "=([^&#]*)";
   var regex = new RegExp(regexS);
@@ -136,7 +134,7 @@ function onMouseDown(event) {
       $('#mycolorpicker').css({"left":event.event.pageX - 250, "top":event.event.pageY - 100}); // make it in the smae position
     }
   }, 100);
-  
+
   if (activeTool == "draw" || activeTool == "pencil") {
     var point = event.point;
     path = new Path();
@@ -215,13 +213,8 @@ function onMouseDrag(event) {
 
       send_paths_timer = setInterval(function () {
 
-        var sendData = {
-          socket : socket,
-          room : room,
-          uid : uid,
-          path_to_send : path_to_send
-        }
-        worker.postMessage(sendData);
+        socket.emit('draw:progress', room, uid, JSON.stringify(path_to_send));
+        path_to_send.path = new Array();
 
       }, 100);
 
@@ -328,7 +321,7 @@ function onKeyDown(event) {
       point = new paper.Point(1, 0);
     }
 
-	// Move objects 1 pixel with arrow keys
+    // Move objects 1 pixel with arrow keys
     if (point) {
       moveItemsBy1Pixel(point);
     }
@@ -341,7 +334,7 @@ function onKeyDown(event) {
         key_move_delta += point;
       }
     }
-	
+
     // Send move updates every 100 ms as batch updates
     if (!key_move_timer_is_active && point) {
       send_key_move_timer = setInterval(function() {
@@ -518,7 +511,7 @@ function clearCanvas() {
       }
     }
   }
-  
+
   // Remove all of the children from the active layer
   if (paper.project.activeLayer && paper.project.activeLayer.hasChildren()) {
     paper.project.activeLayer.removeChildren();
@@ -570,21 +563,21 @@ function encodeAsImgAndLink(svg){
 function exportPNG() {
 //  var canvas = document.getElementById('myCanvas');
   html2canvas(document.getElementById("myCanvas"), {
-  onrendered: function(canvas) {
-	  var html = "<img src='" + canvas.toDataURL('image/png') + "' />"
-	  if ($.browser.msie) {
-		window.winpng = window.open('/export.html');
-		window.winpng.document.write(html);
-		window.winpng.document.body.style.margin = 0;
-	  } else {
-		window.winpng = window.open();
-		window.winpng.document.write(html);
-		window.winpng.document.body.style.margin = 0;
-	  }
-  }
-});
+    onrendered: function(canvas) {
+      var html = "<img src='" + canvas.toDataURL('image/png') + "' />"
+      if ($.browser.msie) {
+        window.winpng = window.open('/export.html');
+        window.winpng.document.write(html);
+        window.winpng.document.body.style.margin = 0;
+      } else {
+        window.winpng = window.open();
+        window.winpng.document.write(html);
+        window.winpng.document.body.style.margin = 0;
+      }
+    }
+  });
 
-  
+
 }
 
 // User selects an image from the file browser to upload
@@ -603,7 +596,7 @@ function uploadImage(file) {
   //attach event handler
   reader.readAsDataURL(file);
   $(reader).bind('loadend', function(e) {
-    var bin = this.result; 
+    var bin = this.result;
 
     //Add to paper project here
     var raster = new Raster(bin);
@@ -657,7 +650,7 @@ socket.on('project:load', function (json) {
   $('#mycolorpicker').pep({});
   // Make sure the range event doesn't propogate to pep
   $('#opacityRangeVal').on('touchstart MSPointerDown mousedown', function(ev){
-    ev.stopPropagation(); 
+    ev.stopPropagation();
   }).on('change', function(ev){
     update_active_color();
   })
@@ -722,7 +715,7 @@ socket.on('image:add', function(artist, data, position, name) {
 var $user_count = $('#online_count');
 
 function update_user_count(count) {
-  $user_count.text((count === 1) ? "1" : " " + count);
+  $user_count.text((count === 1) ? "1" : " " + count);
 }
 
 var external_paths = {};
@@ -739,7 +732,7 @@ var end_external_path = function (points, artist) {
     path.closed = true;
     path.smooth();
     view.draw();
-	
+
     // Remove the old data
     external_paths[artist] = false;
 
