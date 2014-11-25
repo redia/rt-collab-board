@@ -272,6 +272,8 @@ app.controller('MainCtrl', function($scope, socket, toaster) {
 	};
 	connection.onstream = function(e) {
 		e.mediaElement.width = 600;
+		e.session.audio = true;
+		e.session.video = true;
 		videosContainer.insertBefore(e.mediaElement, videosContainer.firstChild);
 		rotateVideo(e.mediaElement);
 		scaleVideos();
