@@ -263,7 +263,8 @@ app.controller('MainCtrl', function($scope, socket, toaster) {
 	// screen sender will be overriding it later.
 	connection.sdpConstraints.mandatory = {
 		OfferToReceiveAudio: true,
-		OfferToReceiveVideo: true
+		OfferToReceiveVideo: true,
+		VoiceActivityDetection: true
 	};
 	connection.session = {
 		screen: true,
