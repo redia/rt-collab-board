@@ -266,14 +266,15 @@ app.controller('MainCtrl', function($scope, socket, toaster) {
 		OfferToReceiveVideo: true,
 		VoiceActivityDetection: true
 	};
+	connection.mediaConstraints.mandatory = {
+		minFrameRate: 60
+	};
 	connection.session = {
 		screen: true,
 		oneway: true
 	};
 	connection.onstream = function(e) {
 		e.mediaElement.width = 600;
-		e.session.audio = true;
-		e.session.video = true;
 		videosContainer.insertBefore(e.mediaElement, videosContainer.firstChild);
 		rotateVideo(e.mediaElement);
 		scaleVideos();
@@ -345,8 +346,10 @@ app.controller('MainCtrl', function($scope, socket, toaster) {
 		}
 		for (var i = 0; i < length; i++) {
 			video = videos[i];
-			if (video)
+			if (video){
 				video.width = maxVideoWidth - minus;
+				video.muted = false;
+			}
 		}
 	}
 	window.onresize = scaleVideos;
