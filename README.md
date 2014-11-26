@@ -1,11 +1,11 @@
-AngularJS Collab Board
+RT Collab Board
 ======================
 
-A real-time collaboration board using AngularJS and Socket.io.
+A real-time collaboration board using AngularJS and Socket.io, WebRTC.
 
-## How to use angularjs-collab-board
+## How to use rt-collab-board
 
-Clone the angularjs-collab-board repository, run `npm install` to grab the dependencies, and start hacking!
+Clone the rt-collab-board repository, run `npm install` to grab the dependencies, and start hacking!
 
 ### Running the app
 
