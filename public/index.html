@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
-<meta charset="utf-8"> 
-<title>Realtime Task Board</title>
-<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/black-tie/jquery-ui.css">
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Droid+Sans&amp;subset=latin">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css">
-<link rel="stylesheet" href="/css/app.css">
-<link rel="stylesheet" href="/css/toaster.css">
-<link rel="stylesheet" href="/css/youtube-player.css">
-<link rel="stylesheet" href="/css/farbtastic.css">
-<script src="/socket.io/socket.io.js"></script>
-<script src="//code.jquery.com/jquery-1.9.1.js"></script>
-<script src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
-<script src="/js/lib/app.js"></script>
-<script src="/js/RTCMultiConnection.js"></script>
-<script src="/js/collab-board.js"></script>
-<script src='/js/draw.js' type="text/paperscript" canvas="myCanvas"></script>
-<script>document.domain = document.domain;</script>
+	<meta charset="utf-8">
+	<title>Realtime Task Board</title>
+	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/black-tie/jquery-ui.css">
+	<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Droid+Sans&amp;subset=latin">
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css">
+	<link rel="stylesheet" href="/css/app.css">
+	<link rel="stylesheet" href="/css/toaster.css">
+	<link rel="stylesheet" href="/css/youtube-player.css">
+	<link rel="stylesheet" href="/css/farbtastic.css">
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+	<script src="/js/fingerprint.js"></script>
+	<script src="/js/jquery.youtube.player.js"></script>
+	<script src="/js/collab-board.js"></script>
+	<script src="/js/toaster.js"></script>
+	<script src='/js/jquery_browser.js'></script>
+	<script src='/js/paper.js'></script>
+	<script src='/js/webtoolkit.base64.js'></script>
+	<script src='/js/farbtastic.js'></script>
+	<script src='/js/html2canvas.min.js'></script>
+	<script src='/js/jquery.pep.min.js'></script>
+	<script src='/js/draw.js' type="text/paperscript" canvas="myCanvas"></script>
+	<script src="/js/RTCMultiConnection.js"></script>
+	<script>document.domain = document.domain;</script>
 </head>
 <body ng-controller="MainCtrl">
 <div id="editbar" class="toolbar">
@@ -32,40 +40,40 @@
 		<input id="ytURL" ng-model="movieVal" type="text" class="title" placeholder="유투브 url 입력후 엔터" style="margin: 0 0 0 7px;" movie-url-sender>
 		<!-- paint brush -->
 		<li class="acl-write" data-key="draw">
-		<a class="grouped-left" data-l10n-id="draw.toolbar.draw.title" id="drawTool">
-		<span class="buttonicon buttonicon-draw"></span>
-		</a>
+			<a class="grouped-left" data-l10n-id="draw.toolbar.draw.title" id="drawTool">
+				<span class="buttonicon buttonicon-draw"></span>
+			</a>
 		</li>
 		<!-- pencil brush -->
 		<li class="acl-write" data-key="pencil">
-		<a class="grouped-middle" data-l10n-id="draw.toolbar.pencil.title" id="pencilTool">
-		<span class="buttonicon buttonicon-pencil"></span>
-		</a>
+			<a class="grouped-middle" data-l10n-id="draw.toolbar.pencil.title" id="pencilTool">
+				<span class="buttonicon buttonicon-pencil"></span>
+			</a>
 		</li>
 		<!-- ColorPicker -->
 		<li class="acl-write"  data-key="showusers">
-		<a class="grouped-middle" data-l10n-id="draw.toolbar.showusers.title" id="usericon">
-		<span class="buttonicon buttonicon-color_picker"></span>
-		</a>
+			<a class="grouped-middle" data-l10n-id="draw.toolbar.showusers.title" id="usericon">
+				<span class="buttonicon buttonicon-color_picker"></span>
+			</a>
 		</li>
 		<!-- Select Tool -->
 		<li class="acl-write" data-key="select">
-		<a class="grouped-middle" data-l10n-id="draw.toolbar.select.title" id="selectTool">
-		<span class="buttonicon buttonicon-select"></span>
-		</a>
+			<a class="grouped-middle" data-l10n-id="draw.toolbar.select.title" id="selectTool">
+				<span class="buttonicon buttonicon-select"></span>
+			</a>
 		</li>
 		<!-- Note -->
 		<li class="acl-write">
-		<a class="grouped-middle">
-		<span class="buttonicon buttonicon-note" id="createButton" ng-click="createNote()"></span>
-		</a>
+			<a class="grouped-middle">
+				<span class="buttonicon buttonicon-note" id="createButton" ng-click="createNote()"></span>
+			</a>
 		</li>
 		<!-- Upload -->
 		<li class="acl-write"  data-key="upload">
-		<a class="grouped-middle" data-l10n-id="draw.toolbar.upload.title" id="uploadImage">
-		<span class="buttonicon buttonicon-upload"></span>
-		</a>
-		<!-- ScreenSharing -->
+			<a class="grouped-middle" data-l10n-id="draw.toolbar.upload.title" id="uploadImage">
+				<span class="buttonicon buttonicon-upload"></span>
+			</a>
+			<!-- ScreenSharing -->
 		<li class="acl-write"  data-key="screen">
 			<a class="grouped-right" data-l10n-id="draw.toolbar.screen.title" id="screeShare">
 				<span class="buttonicon buttonicon-screen"></span>
@@ -76,23 +84,23 @@
 	<ul class="menu_right">
 		<!-- settings -->
 		<li data-key="settings">
-		<a id="settingslink" class="grouped-left" data-l10n-id="draw.toolbar.settings.title">
-		<span class="grouped-left buttonicon buttonicon-settings"></span>
-		</a>
+			<a id="settingslink" class="grouped-left" data-l10n-id="draw.toolbar.settings.title">
+				<span class="grouped-left buttonicon buttonicon-settings"></span>
+			</a>
 		</li>
 		<!-- import export -->
 		<li data-key="import_export">
-		<a id="importExport" class="grouped-right" data-l10n-id="draw.toolbar.import_export.title">
-		<span class="buttonicon buttonicon-import_export"></span>
-		</a>
-		</li>		
+			<a id="importExport" class="grouped-right" data-l10n-id="draw.toolbar.import_export.title">
+				<span class="buttonicon buttonicon-import_export"></span>
+			</a>
+		</li>
 		<!-- user stuff -->
 		<li class="separator"></li>
 		<li>
-		<a> 
-		<span class="buttonicon buttonicon-showusers"></span>
-		<span id="online_count">1</span>
-		</a>
+			<a>
+				<span class="buttonicon buttonicon-showusers"></span>
+				<span id="online_count">1</span>
+			</a>
 		</li>
 	</ul>
 </div>
